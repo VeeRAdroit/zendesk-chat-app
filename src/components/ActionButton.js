@@ -6,6 +6,7 @@ class ActionButton extends Component {
   render() {
     return (
       <button
+        disabled={this.props.disabled}
         className={`action-button ${this.props.addClass}`}
         onClick={this.props.onClick}>
         {this.props.label}
