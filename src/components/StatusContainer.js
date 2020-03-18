@@ -30,9 +30,16 @@ class StatusContainer extends Component {
     return (
       <div className="status-container">
         {this.getStatusText(this.props.accountStatus)}
-        {!this.props.hideMinimizeButton && <div className="minimize-button" onClick={this.props.minimizeOnClick}>
-          <div className="minimize-button-bar" />
-        </div>
+        {!this.props.hideMinimizeButton && (
+          <div>
+            <div className="status-button" >
+              <div className="status-button-icon minimize" onClick={this.props.minimizeOnClick}>&minus;</div>
+              <div className="status-button-icon close" onClick={this.props.closeOnClick}>&times;</div>
+            </div>
+            <div className="close-button" >
+              <div className="close-button-bar" />
+            </div>
+          </div>)
         }
       </div>
     );

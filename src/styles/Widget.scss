@@ -214,9 +214,9 @@ svg {
     background-color: $theme-color;
 }
 
-.minimize-button {
+.status-button {
     position: absolute;
-    width: 48px;
+    width: 5rem;
     top: 0;
     right: 0;
     height: 100%;
@@ -224,12 +224,12 @@ svg {
     justify-content: center;
     cursor: pointer;
 
-    &-bar {
-        height: 2px;
-        background: #fff;
-        width: 16px;
-        top: 50%;
-        position: absolute;
+    &-icon {
+      padding: auto;
+      width: 2.5rem;
+      font-size: 2rem;
+      font-weight: bolder;
+      color: white;
     }
 }
 

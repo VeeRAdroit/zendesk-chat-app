@@ -30,6 +30,7 @@ class App extends Component {
     this.handleOnChange = this.handleOnChange.bind(this);
     this.getVisibilityClass = this.getVisibilityClass.bind(this);
     this.minimizeOnClick = this.minimizeOnClick.bind(this);
+    this.closeOnClick = this.closeOnClick.bind(this);
     this.chatButtonOnClick = this.chatButtonOnClick.bind(this);
     this.mapToEntities = this.mapToEntities.bind(this);
     this.isOffline = this.isOffline.bind(this);
@@ -74,6 +75,12 @@ class App extends Component {
       visible: get('visible') || this.state.visible,
       theme: get('theme') || this.state.theme
     });
+  }
+
+  componentWillUnmount() {
+    zChat.endChat();
+    window.zendeskWidget = undefined;
+    window.zChat = undefined;
   }
 
   handleOnChange() {
@@ -169,6 +176,11 @@ class App extends Component {
 
   minimizeOnClick() {
     this.setVisible(false);
+  }
+
+  closeOnClick() {
+    zChat.endChat();
+    this.minimizeOnClick();
   }
 
   chatButtonOnClick() {
@@ -271,6 +283,7 @@ class App extends Component {
             accountStatus={this.props.data.account_status}
             hideMinimizeButton={_.get(this.props, 'options.hideMinimizeButton')}
             minimizeOnClick={this.minimizeOnClick}
+            closeOnClick={this.closeOnClick}
           />
           <MessageList
             visible={this.state.visible}
@@ -288,7 +301,7 @@ class App extends Component {
             <div className="spinner"></div>
           </div>
           <Input
-            addClass={this.props.data.is_chatting ? 'visible' : ''}
+            addClass={this.props.data.is_chatting && this.state.visible ? 'visible' : ''}
             ref="input"
             onSubmit={this.handleOnSubmit}
             onChange={this.handleOnChange}

@@ -7,7 +7,6 @@ import ChatStore from 'stores/ChatStore';
 function initialize(options = {}) {
   const widgetId = options.rootElementId || 'widget';
 	let widget = document.getElementById(widgetId);
-  console.log("$$ init ", options);
 	if (!widget) {
 		widget = document.createElement('div');
 		widget.id = widgetId;
@@ -24,7 +23,6 @@ function initialize(options = {}) {
 }
 
 window.activateZendesk = function(options) {
-  console.log("$$$ activateZendesk ", options);
   if(!window.zendeskWidget) {
     initialize(options);
   } else {
