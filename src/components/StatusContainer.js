@@ -9,7 +9,7 @@ class StatusContainer extends Component {
   }
 
   renderIcon() {
-    const isString = typeof(this.props.icon) === 'string';
+    const isString = typeof (this.props.icon) === 'string';
     return (
       <div className="card-icon">
         {!isString && this.props.icon}
@@ -30,9 +30,10 @@ class StatusContainer extends Component {
     return (
       <div className="status-container">
         {this.getStatusText(this.props.accountStatus)}
-        <div className="minimize-button" onClick={this.props.minimizeOnClick}>
+        {!this.props.hideMinimizeButton && <div className="minimize-button" onClick={this.props.minimizeOnClick}>
           <div className="minimize-button-bar" />
         </div>
+        }
       </div>
     );
   }

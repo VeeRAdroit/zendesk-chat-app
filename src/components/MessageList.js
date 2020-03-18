@@ -66,9 +66,9 @@ class MessageList extends Component {
           />
         );
       case 'offline':
-        return <OfflineForm key="offline" />;
+        return <OfflineForm key="offline" options={this.props.options} />;
       case 'prechat':
-        return <PrechatForm key="prechat" />;
+        return <PrechatForm key="prechat" options={this.props.options} />;
       default:
         return <div key={+new Date()}>Unhandled message: {JSON.stringify(msg)}</div>
     }

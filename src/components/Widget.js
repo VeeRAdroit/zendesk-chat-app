@@ -8,7 +8,7 @@ import MessageList from 'components/MessageList';
 import ChatButton from 'components/ChatButton';
 import Input from 'components/Input';
 import { log, get, set } from 'utils';
-import { debounce } from 'lodash';
+import _, { debounce, isFunction } from 'lodash';
 import zChat from 'vendor/web-sdk';
 
 const { ENV, ACCOUNT_KEY, THEME } = config;
@@ -18,12 +18,12 @@ if (ENV === 'dev') {
 }
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      theme: THEME,
+      theme: _.get(props, 'options.theme') || THEME,
       typing: false,
-      visible: false
+      visible: !_.get(props, 'options.hideOnInit')
     };
     this.timer = null;
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -37,11 +37,13 @@ class App extends Component {
     this.setVisible = this.setVisible.bind(this);
     this.setTheme = this.setTheme.bind(this);
     this.handleFileUpload = this.handleFileUpload.bind(this);
+    this.toggle = this.toggle.bind(this);
+    window.zendeskWidget = this;
   }
 
   componentDidMount() {
     zChat.init({
-      account_key: ACCOUNT_KEY
+      account_key: _.get(this.props, 'options.accountKey') || ACCOUNT_KEY
     });
 
     const events = [
@@ -102,7 +104,16 @@ class App extends Component {
 
     // Immediately stop typing
     this.stopTyping.flush();
-    zChat.sendChatMsg(msg, (err) => {
+    const { transformMessage } = this.props.options || {};
+    const transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
+    // let scrubbedMsg = msg.replace(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, '[REDACTED PHONE]');
+    // scrubbedMsg = scrubbedMsg.replace(/^(\d{16})$/g, '[REDACTED ID]');
+    // scrubbedMsg = scrubbedMsg.replace(/^(\d{4}(-)\d{4}(-)\d{4}(-)\d{4})$/g, '[REDACTED CARD NO]');
+    // scrubbedMsg = scrubbedMsg.replace(/^(\d{4}(\s)\d{4}(\s)\d{4}(\s)\d{4})$/g, '[REDACTED CARD NO]');
+    //msg.replace(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, "[REDACTED PHONE]")
+    //console.log(scrubbedMsg);
+
+    zChat.sendChatMsg(transformedMessage, (err) => {
       if (err) {
         log('Error occured >>>', err);
         return;
@@ -113,7 +124,7 @@ class App extends Component {
       type: 'synthetic',
       detail: {
         type: 'visitor_send_msg',
-        msg
+        msg: transformedMessage
       }
     });
     this.refs.input.getRawInput().value = '';
@@ -171,6 +182,14 @@ class App extends Component {
     set('visible', visible);
   }
 
+  toggle = function () {
+    const visible = !this.state.visible;
+    this.setState({
+      visible
+    });
+    set('visible', visible);
+  }
+
   mapToEntities(visitor, agents) {
     const entities = {};
     if (visitor) {
@@ -209,7 +228,7 @@ class App extends Component {
   }
 
   onThemeChange(theme) {
-    if (theme !== 'docked' && theme !== 'normal') {
+    if (theme !== 'docked' && theme !== 'normal' && theme !== 'standalone') {
       theme = 'docked';
     }
 
@@ -231,14 +250,14 @@ class App extends Component {
           <div className="warning-container">
             <div className="warning">
               🚨🚨🚨&nbsp;&nbsp;&nbsp;You might have forgotten to configure the widget with your own account key.&nbsp;&nbsp;&nbsp;🚨🚨🚨
-              <br/><br/>
+              <br /><br />
               Check the README for more details.
             </div>
           </div>
         );
       }
       else {
-        return <div/>;
+        return <div />;
       }
     }
 
@@ -250,6 +269,7 @@ class App extends Component {
         <div className={`widget-container ${this.getTheme()} ${this.getVisibilityClass()}`}>
           <StatusContainer
             accountStatus={this.props.data.account_status}
+            hideMinimizeButton={_.get(this.props, 'options.hideMinimizeButton')}
             minimizeOnClick={this.minimizeOnClick}
           />
           <MessageList
@@ -262,6 +282,7 @@ class App extends Component {
             entities={entities}
             lastRatingRequestTimestamp={this.props.data.last_rating_request_timestamp}
             hasRating={this.props.data.has_rating}
+            options={this.props.options}
           />
           <div className={`spinner-container ${this.state.visible && this.props.data.connection !== 'connected' ? 'visible' : ''}`}>
             <div className="spinner"></div>
@@ -275,7 +296,7 @@ class App extends Component {
             onFileUpload={this.handleFileUpload}
           />
         </div>
-        <ChatButton addClass={this.getVisibilityClass()} onClick={this.chatButtonOnClick} />
+        {!_.get(this.props, 'options.hideChatButton') && <ChatButton addClass={this.getVisibilityClass()} onClick={this.chatButtonOnClick} />}
       </div>
     );
   }

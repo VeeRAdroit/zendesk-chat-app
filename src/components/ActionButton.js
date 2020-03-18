@@ -19,7 +19,8 @@ ActionButton.displayName = 'ActionButton';
 ActionButton.propTypes = {
   onClick: React.PropTypes.func,
   label: React.PropTypes.string,
-  addClass: React.PropTypes.string
+  addClass: React.PropTypes.string,
+  disabled: React.PropTypes.bool
 };
 
 export default ActionButton;
