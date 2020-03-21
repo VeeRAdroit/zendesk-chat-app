@@ -20,7 +20,7 @@ class StatusContainer extends Component {
   getStatusText(status) {
     switch (status) {
       case 'online': return 'We\'re online!';
-      case 'offline': return 'Leave us a message';
+      case 'offline': return 'We\'re offline';
       case 'away': return 'We\'re away!';
       default: return 'Connecting...';
     }
