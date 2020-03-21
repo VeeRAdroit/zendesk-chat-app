@@ -81,6 +81,7 @@ $theme-color: #0000FF;
     &.normal {
         position: fixed;
         width: calc(100% - 20px);
+        max-height: calc(100% - 20px);
         max-width: 400px;
         bottom: 10px;
         height: 500px;
