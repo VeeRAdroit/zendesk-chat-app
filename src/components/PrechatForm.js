@@ -38,8 +38,11 @@ class PrechatForm extends Component {
     const { transformMessage } = this.props.options || {};
     const transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
 
-    const display_name = !this.props.options.userId && this.props.options.anonymous ? '' :
-      this.props.options.userId || this.refs.name.value || '';
+    const userId = this.props.options.userId;
+    const orderId = localStorage.getItem('orderId');
+    const deviceId = localStorage.getItem('deviceId');
+
+    const display_name =  this.props.options.anonymous ? userId || orderId || deviceId || '' : this.refs.name.value || '';
 
     zChat.setVisitorInfo({
       display_name: display_name,
@@ -61,14 +64,17 @@ class PrechatForm extends Component {
   }
 
   renderChild() {
+    const orderId = localStorage.getItem('orderId');
+    const deviceId = localStorage.getItem('deviceId');
+    const userId = this.props.options.userId || orderId || deviceId || '';
     return (
       <form ref="form" key="not-sent" className="offline-form">
         <div className="content">
           {!this.props.options.anonymous && <div className="section">
-            <label className="label">{ this.props.options.userId ? 'User Id' : 'Name' }</label>
+            <label className="label">{ userId ? 'User Id' : 'Name' }</label>
             {
-             this.props.options.userId ?
-             <input ref="name" maxLength="255" value={this.props.options.userId} readOnly={this.props.options.userId}/> :
+             userId ?
+             <input ref="name" maxLength="255" value={userId} readOnly={userId}/> :
              <input ref="name" maxLength="255" />
             }
           </div>}
