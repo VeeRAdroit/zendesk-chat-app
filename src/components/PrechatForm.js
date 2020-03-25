@@ -89,7 +89,7 @@ class PrechatForm extends Component {
           <div className="section">
             <div className="tnc">
              <input required ref="tncAgreed" name="tnc" type="checkbox" value={true} />
-             <p className="tnc-message">Demi kenyamanan dan privasi Anda, interaksi ini akan kami jadikan referensi informasi data pelanggan kami. Untuk info lebih lengkap mengenai privasi pelanggan XL, kunjungi <a href="https://prioritas.xl.co.id/id/news-promo/news/kebijakan-privasi">Privacy Policy</a> Pilih Lanjut setelah Anda membaca dan menyetujui syarat dan ketentuan mengenai privasi pelanggan XL.</p>
+             <p className="tnc-message">Demi kenyamanan dan privasi Anda, interaksi ini akan kami jadikan referensi informasi data pelanggan kami. Untuk info lebih lengkap mengenai privasi pelanggan XL, kunjungi <a href="https://prioritas.xl.co.id/id/news-promo/news/kebijakan-privasi">kebijakan-privasi</a> Pilih Lanjut setelah Anda membaca dan menyetujui syarat dan ketentuan mengenai privasi pelanggan XL.</p>
             </div>
           </div>
         </div>
