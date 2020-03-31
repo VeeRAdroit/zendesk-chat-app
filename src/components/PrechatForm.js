@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import CardContainer from 'components/CardContainer';
 import MessageSvg from 'components/MessageSvg';
 import ActionButton from 'components/ActionButton';
-import { log } from 'utils';
+import { log, urlParam, redactPII } from 'utils';
 import { connect } from 'react-redux'
 import { isFunction } from 'lodash';
 import zChat from 'vendor/web-sdk';
@@ -35,10 +35,13 @@ class PrechatForm extends Component {
     // Don't send empty messages
     if (!msg) return;
 
-    const { transformMessage } = this.props.options || {};
-    const transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
+    const { transformMessage, redact } = this.props.options || {};
+    let transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
+    if(redact) {
+      transformedMessage = redactPII(transformedMessage);
+    }
 
-    const userId = this.props.options.userId;
+    const userId = this.props.options.userId || urlParam('userid');
     const orderId = localStorage.getItem('orderId');
     const deviceId = localStorage.getItem('deviceId');
 

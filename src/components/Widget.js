@@ -7,7 +7,7 @@ import StatusContainer from 'components/StatusContainer';
 import MessageList from 'components/MessageList';
 import ChatButton from 'components/ChatButton';
 import Input from 'components/Input';
-import { log, get, set } from 'utils';
+import { log, get, set, redactPII } from 'utils';
 import _, { debounce, isFunction } from 'lodash';
 import zChat from 'vendor/web-sdk';
 
@@ -111,14 +111,11 @@ class App extends Component {
 
     // Immediately stop typing
     this.stopTyping.flush();
-    const { transformMessage } = this.props.options || {};
-    const transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
-    // let scrubbedMsg = msg.replace(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, '[REDACTED PHONE]');
-    // scrubbedMsg = scrubbedMsg.replace(/^(\d{16})$/g, '[REDACTED ID]');
-    // scrubbedMsg = scrubbedMsg.replace(/^(\d{4}(-)\d{4}(-)\d{4}(-)\d{4})$/g, '[REDACTED CARD NO]');
-    // scrubbedMsg = scrubbedMsg.replace(/^(\d{4}(\s)\d{4}(\s)\d{4}(\s)\d{4})$/g, '[REDACTED CARD NO]');
-    //msg.replace(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, "[REDACTED PHONE]")
-    //console.log(scrubbedMsg);
+    const { transformMessage, redact } = this.props.options || {};
+    let transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
+    if(redact) {
+      transformedMessage = redactPII(transformedMessage);
+    }
 
     zChat.sendChatMsg(transformedMessage, (err) => {
       if (err) {
