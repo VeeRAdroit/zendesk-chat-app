@@ -56,6 +56,30 @@ const wordRedactions = [
     exclude: /^(00000158)[0-9]{10}$/g,
     name: 'ID_CARD',
     text: '[DIHAPUS]'
+  },
+  {
+    regex: [
+      /^(perempuan|laki-laki|lelaki|wanita|pria|(fe)?male|(wo)?m(a|e)n|c(e|o)?w(e|o)(k)?|girl|boy)$/gi
+    ],
+    exclude: /^((2003)[0-9a-z]{10}|(00000158)[0-9]{10})$/gi,
+    name: 'GENDER',
+    text: '[DIHAPUS]'
+  },
+  {
+    regex: [
+      /^((ch|k)rist(ia|e)n|(k|ch)at(h)?oli(c|k)|bud(d)?(h)?(a|ist)|m(u|o)sl(i|e)m|protestan|konghucu|hindu|islam)$/gi
+    ],
+    exclude: /^((2003)[0-9a-z]{10}|(00000158)[0-9]{10})$/gi,
+    name: 'RELIGION',
+    text: '[DIHAPUS]'
+  },
+  {
+    regex: [
+      /^(pascasarjana|pasca|sarjana|diploma|do(c|k)tor|s(mp|ma|1|2|3)|d3)$/gi
+    ],
+    exclude: /^((2003)[0-9a-z]{10}|(00000158)[0-9]{10})$/gi,
+    name: 'EDUCATION',
+    text: '[DIHAPUS]'
   }
 ];
 
