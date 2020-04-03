@@ -104,6 +104,18 @@ export const redactPII = (text = '') => {
       },
       digits: {
         enabled: false
+      },
+      name: {
+        enabled: false
+      },
+      password: {
+        enabled: false
+      },
+      username: {
+        enabled: false
+      },
+      streetAddress: {
+        enabled: false
       }
     }
   });
