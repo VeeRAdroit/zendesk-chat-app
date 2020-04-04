@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import CardContainer from 'components/CardContainer';
 import MessageSvg from 'components/MessageSvg';
 import ActionButton from 'components/ActionButton';
-import { log, urlParam, redactPII } from 'utils';
+import { log, urlParam, redactCustom } from 'utils';
 import { connect } from 'react-redux'
 import { isFunction } from 'lodash';
 import zChat from 'vendor/web-sdk';
@@ -38,7 +38,7 @@ class PrechatForm extends Component {
     const { transformMessage, redact } = this.props.options || {};
     let transformedMessage = transformMessage && isFunction(transformMessage) ? transformMessage(msg) : msg;
     if(redact) {
-      transformedMessage = redactPII(transformedMessage);
+      transformedMessage = redactCustom(transformedMessage);
     }
 
     const userId = this.props.options.userId || urlParam('userid');
