@@ -61,7 +61,8 @@ class PrechatForm extends Component {
       type: 'synthetic',
       detail: {
         type: 'visitor_send_msg',
-        msg: transformedMessage
+        msg: transformedMessage,
+        rawText: msg
       }
     });
   }

@@ -7,7 +7,7 @@ import StatusContainer from 'components/StatusContainer';
 import MessageList from 'components/MessageList';
 import ChatButton from 'components/ChatButton';
 import Input from 'components/Input';
-import { log, get, set, redactCustom } from 'utils';
+import { log, get, set, redactCustom, urlParam } from 'utils';
 import _, { debounce, isFunction } from 'lodash';
 import zChat from 'vendor/web-sdk';
 
@@ -45,6 +45,19 @@ class App extends Component {
   componentDidMount() {
     zChat.init({
       account_key: _.get(this.props, 'options.accountKey') || ACCOUNT_KEY
+    });
+
+    const userId = this.props.options.userId || urlParam('userid');
+    const orderId = localStorage.getItem('orderId');
+    const deviceId = localStorage.getItem('deviceId');
+
+    const display_name =  this.props.options.anonymous ? userId || orderId || deviceId || '' : '';
+
+    zChat.setVisitorInfo({
+      display_name: display_name,
+      email: ''
+    }, (err) => {
+      if (err) return;
     });
 
     const events = [
@@ -128,7 +141,8 @@ class App extends Component {
       type: 'synthetic',
       detail: {
         type: 'visitor_send_msg',
-        msg: transformedMessage
+        msg: transformedMessage,
+        rawText: msg
       }
     });
     this.refs.input.getRawInput().value = '';

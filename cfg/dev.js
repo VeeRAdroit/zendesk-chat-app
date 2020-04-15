@@ -14,22 +14,17 @@ let config = Object.assign({}, baseConfig, {
   cache: true,
   devtool: 'eval-source-map',
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ],
   module: defaultSettings.getDefaultModules(),
-  postcss: defaultSettings.postcss,
   mode: 'development'
 });
 
 // Add needed loaders to the defaults here
 config.module.rules.push({
   test: /\.(js|jsx)$/,
-  loader: 'react-hot!babel-loader',
-  include: [path.join(__dirname, 'node_modules')].concat(
-    config.additionalPaths,
-    [ path.join(__dirname, '/../src') ]
-  )
+  loader: 'react-hot-loader/webpack!babel-loader',
+  include: [path.join(__dirname, 'node_modules'), path.join(__dirname, '/../src') ]
 });
 
 module.exports = config;

@@ -290,6 +290,14 @@ svg {
         border: 1px solid #DDDDDD;
         background: #FFFFFF;
     }
+
+    .rawText {
+      display: block;
+      border-radius: .5rem;
+      margin-top: .5rem;
+      border: 1px dotted gray;
+      padding: 0.5rem;
+    }
 }
 
 .chat-media-container {
